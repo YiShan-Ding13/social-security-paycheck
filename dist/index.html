@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Estimate how a projected 2027 Social Security COLA could change your monthly benefit and take-home amount after Medicare Part B.">
+  <meta name="theme-color" content="#07111f">
+  <title>2027 Social Security COLA Calculator | BenefitLens</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#calculator">Skip to calculator</a>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="BenefitLens home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 17V9m7 8V5m7 12v-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M3 20h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </span>
+      <span>BenefitLens</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="#method">How it works</a>
+      <a href="#sources">Sources</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> Updated September 18, 2026</p>
+        <h1 id="page-title">See what the 2027 COLA could mean for your check.</h1>
+        <p class="lede">Estimate your monthly increase, annual gain, and take-home amount after Medicare Part B. Your entries stay in your browser.</p>
+      </div>
+      <aside class="forecast-note" aria-label="Forecast status">
+        <span class="forecast-label">2027 status</span>
+        <strong>Forecast, not official</strong>
+        <span>The official COLA is expected after September CPI-W data.</span>
+      </aside>
+    </section>
+
+    <section class="calculator-shell" id="calculator" aria-labelledby="calculator-title">
+      <div class="input-panel">
+        <div class="section-heading">
+          <span class="step">01</span>
+          <div>
+            <h2 id="calculator-title">Enter your numbers</h2>
+            <p>Use the gross amount before deductions.</p>
+          </div>
+        </div>
+
+        <form id="cola-form" novalidate>
+          <div class="field">
+            <label for="current-benefit">Current monthly benefit</label>
+            <div class="money-input">
+              <span aria-hidden="true">$</span>
+              <input id="current-benefit" name="currentBenefit" type="number" inputmode="decimal" min="1" max="100000" step="0.01" value="2085.98" aria-describedby="benefit-hint benefit-error">
+            </div>
+            <p class="field-hint" id="benefit-hint">Before Medicare or tax withholding</p>
+            <p class="field-error" id="benefit-error" role="alert"></p>
+          </div>
+
+          <fieldset class="field">
+            <legend>COLA scenario</legend>
+            <div class="scenario-grid">
+              <label class="scenario"><input type="radio" name="scenario" value="3.4"><span><small>Low</small>3.4%</span></label>
+              <label class="scenario selected"><input type="radio" name="scenario" value="3.5" checked><span><small>Mid</small>3.5%</span></label>
+              <label class="scenario"><input type="radio" name="scenario" value="3.6"><span><small>High</small>3.6%</span></label>
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <div class="label-row">
+              <label for="part-b">Estimated 2027 Part B premium</label>
+              <span class="estimate-chip">Editable estimate</span>
+            </div>
+            <div class="money-input">
+              <span aria-hidden="true">$</span>
+              <input id="part-b" name="partB" type="number" inputmode="decimal" min="0" max="5000" step="0.01" value="202.90" aria-describedby="part-b-hint part-b-error">
+            </div>
+            <p class="field-hint" id="part-b-hint">Use 0 if Part B is not deducted from your check</p>
+            <p class="field-error" id="part-b-error" role="alert"></p>
+          </div>
+        </form>
+
+        <div class="privacy-line">
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path d="M7 10V7a5 5 0 0 1 10 0v3m-11 0h12v10H6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          Calculated on this device. Nothing is saved or sent.
+        </div>
+      </div>
+
+      <div class="result-panel" aria-live="polite" aria-atomic="true">
+        <div class="result-topline">
+          <span>Estimated monthly take-home</span>
+          <span class="forecast-pill">Projected</span>
+        </div>
+        <div class="hero-result"><span>$</span><strong id="net-result">1,956.09</strong></div>
+        <p class="result-context">after the Part B premium you entered</p>
+
+        <div class="metric-grid">
+          <article>
+            <span>New gross benefit</span>
+            <strong id="gross-result">$2,158.99</strong>
+          </article>
+          <article>
+            <span>Monthly increase</span>
+            <strong class="positive" id="monthly-increase">+$73.01</strong>
+          </article>
+          <article>
+            <span>Annual increase</span>
+            <strong class="positive" id="annual-increase">+$876.12</strong>
+          </article>
+          <article>
+            <span>Scenario used</span>
+            <strong id="scenario-result">3.5%</strong>
+          </article>
+        </div>
+
+        <div class="formula-box">
+          <span>Calculation</span>
+          <code id="formula-result">$2,085.98 × 1.035 − $202.90</code>
+        </div>
+        <p class="disclaimer">Planning estimate only. Your actual payment can differ because SSA applies statutory calculations and rounding. This site is not affiliated with the Social Security Administration.</p>
+      </div>
+    </section>
+
+    <section class="method-grid" id="method" aria-labelledby="method-title">
+      <div class="method-copy">
+        <p class="eyebrow">The three-month formula</p>
+        <h2 id="method-title">Follow the data that sets the COLA.</h2>
+        <p>SSA compares the average CPI-W for July, August, and September with the same quarter from the last year a COLA was determined. The final percentage is announced after all three months are available.</p>
+        <a class="text-link" href="https://www.ssa.gov/cola/" target="_blank" rel="noopener">Read the official SSA explanation <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="tracker-card" aria-label="2027 COLA data progress">
+        <div class="tracker-head">
+          <div>
+            <span>Q3 CPI-W progress</span>
+            <strong>2 of 3 months available</strong>
+          </div>
+          <span class="progress-count">67%</span>
+        </div>
+        <div class="progress-track" aria-hidden="true"><span></span></div>
+        <ol class="month-list">
+          <li class="complete"><span>July</span><strong>Published</strong></li>
+          <li class="complete"><span>August</span><strong>Published</strong></li>
+          <li><span>September</span><strong>Pending</strong></li>
+        </ol>
+        <p>Forecast scenarios will change as new inflation data arrives.</p>
+      </div>
+    </section>
+
+    <section class="source-strip" id="sources" aria-labelledby="sources-title">
+      <div>
+        <p class="eyebrow">Primary sources</p>
+        <h2 id="sources-title">Check the official numbers.</h2>
+      </div>
+      <div class="source-links">
+        <a href="https://www.ssa.gov/cola/" target="_blank" rel="noopener"><span>SSA</span><strong>COLA information</strong><span aria-hidden="true">↗</span></a>
+        <a href="https://www.bls.gov/cpi/data.htm" target="_blank" rel="noopener"><span>BLS</span><strong>CPI data</strong><span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <a class="brand footer-brand" href="#top"><span class="brand-mark" aria-hidden="true">B</span><span>BenefitLens</span></a>
+    <p>Independent planning tools for clearer retirement decisions.</p>
+    <p>© 2026 BenefitLens. Educational use only.</p>
+  </footer>
+</body>
+</html>
