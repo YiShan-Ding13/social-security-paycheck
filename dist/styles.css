@@ -86,9 +86,6 @@ label, legend { display: block; margin-bottom: 9px; font-weight: 700; color: #e7
 .scenario input:focus-visible + span { outline: 3px solid var(--focus); outline-offset: 3px; }
 .scenario input:checked + span { border-color: var(--primary); background: rgba(59,130,246,.17); color: #fff; }
 .scenario input:checked + span small { color: #bcd4ff; }
-.privacy-line { display: flex; align-items: center; gap: 9px; padding-top: 4px; color: var(--muted); font-size: .88rem; }
-.privacy-line svg { color: var(--accent); flex: 0 0 auto; }
-
 .result-panel { position: relative; background: linear-gradient(145deg, rgba(20,43,65,.96), rgba(9,28,42,.92)); }
 .result-panel::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 78% 16%, rgba(72,213,163,.11), transparent 40%); }
 .result-panel > * { position: relative; }
@@ -104,8 +101,6 @@ label, legend { display: block; margin-bottom: 9px; font-weight: 700; color: #e7
 .metric-grid .positive { color: var(--accent); }
 .formula-box { display: flex; justify-content: space-between; gap: 18px; margin-top: 24px; padding: 15px 17px; border-radius: 10px; background: rgba(0,0,0,.16); color: var(--muted); font-size: .88rem; }
 .formula-box code { color: #dbeafe; text-align: right; white-space: normal; }
-.disclaimer { margin: 20px 0 0; color: #97a8ba; font-size: .82rem; }
-
 .method-grid { padding: 110px 0; display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(50px, 10vw, 120px); align-items: center; }
 .method-copy p:not(.eyebrow) { color: var(--muted); font-size: 1.05rem; }
 .text-link { min-height: 44px; display: inline-flex; align-items: center; gap: 8px; color: var(--primary); font-weight: 700; text-decoration-thickness: 1px; text-underline-offset: 5px; }
@@ -121,8 +116,6 @@ label, legend { display: block; margin-bottom: 9px; font-weight: 700; color: #e7
 .month-list li:last-child { border: 0; }
 .month-list .complete span::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 10px; border-radius: 50%; background: var(--accent); }
 .month-list strong { color: var(--text); font-size: .88rem; }
-.tracker-card > p { margin: 18px 0 0; color: var(--muted); font-size: .85rem; }
-
 .source-strip { padding: 40px 0 70px; display: grid; grid-template-columns: 1fr 1.5fr; gap: 48px; align-items: center; border-top: 1px solid var(--border); }
 .source-strip h2 { font-size: 1.65rem; }
 .source-links { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
