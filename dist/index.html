@@ -23,6 +23,7 @@
       <span>BenefitLens</span>
     </a>
     <nav aria-label="Primary navigation">
+      <a href="#payment-dates">Payment dates</a>
       <a href="#method">How it works</a>
       <a href="#sources">Sources</a>
     </nav>
@@ -119,6 +120,79 @@
           <span>Calculation</span>
           <code id="formula-result">$2,085.98 × 1.035 − $202.90</code>
         </div>
+      </div>
+    </section>
+
+    <section class="schedule-section" id="payment-dates" aria-labelledby="schedule-title">
+      <div class="schedule-intro">
+        <div>
+          <p class="eyebrow">2027 payment calendar</p>
+          <h2 id="schedule-title">Find the date your check should arrive.</h2>
+        </div>
+        <p>Choose the situation that applies to you. For most people who started benefits after April 1997, the payment date is based on the worker's day of birth.</p>
+      </div>
+
+      <div class="schedule-workspace">
+        <form id="schedule-form" class="schedule-controls" novalidate>
+          <fieldset>
+            <legend>Which situation applies?</legend>
+            <label class="payment-type">
+              <input type="radio" name="payment-type" value="birthday" checked>
+              <span><strong>Social Security</strong><small>Started after April 1997</small></span>
+            </label>
+            <label class="payment-type">
+              <input type="radio" name="payment-type" value="legacy">
+              <span><strong>Earlier or combined benefits</strong><small>Before May 1997, or Social Security plus SSI</small></span>
+            </label>
+            <label class="payment-type">
+              <input type="radio" name="payment-type" value="ssi">
+              <span><strong>SSI only</strong><small>Supplemental Security Income</small></span>
+            </label>
+          </fieldset>
+
+          <div class="field compact-field" id="birthday-wrap">
+            <label for="birth-day">Day of birth</label>
+            <input id="birth-day" type="number" inputmode="numeric" min="1" max="31" step="1" value="15" aria-describedby="birth-day-hint birth-day-error">
+            <p class="field-hint" id="birth-day-hint">Enter only the day, from 1 to 31</p>
+            <p class="field-error" id="birth-day-error" role="alert"></p>
+          </div>
+
+          <a class="official-calendar-link" href="https://www.ssa.gov/pubs/EN-05-10031-2027.pdf" target="_blank" rel="noopener">
+            View the official SSA 2027 calendar <span aria-hidden="true">↗</span>
+          </a>
+        </form>
+
+        <div class="schedule-results" aria-live="polite">
+          <div class="schedule-result-head">
+            <span>Your 2027 schedule</span>
+            <strong id="schedule-summary">Third Wednesday schedule</strong>
+          </div>
+          <div class="schedule-grid" id="schedule-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cola-basics" aria-labelledby="basics-title">
+      <div class="basics-heading">
+        <p class="eyebrow">COLA in 30 seconds</p>
+        <h2 id="basics-title">Why your benefit changes each year.</h2>
+      </div>
+      <div class="basics-grid">
+        <article>
+          <span class="basics-number">01</span>
+          <h3>It protects buying power</h3>
+          <p>COLA raises Social Security and SSI benefits when measured prices rise, helping benefits keep pace with inflation.</p>
+        </article>
+        <article>
+          <span class="basics-number">02</span>
+          <h3>Three months set the rate</h3>
+          <p>SSA compares the average CPI-W for July, August, and September with the prior comparison period.</p>
+        </article>
+        <article>
+          <span class="basics-number">03</span>
+          <h3>Your net change matters</h3>
+          <p>The COLA raises your gross benefit. Medicare premiums and other deductions affect what reaches your account.</p>
+        </article>
       </div>
     </section>
 

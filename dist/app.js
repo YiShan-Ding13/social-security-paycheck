@@ -27,6 +27,50 @@
     return `${sign && value >= 0 ? "+" : value < 0 ? "-" : ""}$${formatted}`;
   }
 
+  const FEDERAL_HOLIDAYS_2027 = new Set([
+    "2027-01-01", "2027-01-18", "2027-02-15", "2027-05-31",
+    "2027-06-18", "2027-07-05", "2027-09-06", "2027-10-11",
+    "2027-11-11", "2027-11-25", "2027-12-24"
+  ]);
+
+  function isoDate(date) {
+    return date.toISOString().slice(0, 10);
+  }
+
+  function previousBusinessDay(date) {
+    const result = new Date(date.getTime());
+    while (result.getUTCDay() === 0 || result.getUTCDay() === 6 || FEDERAL_HOLIDAYS_2027.has(isoDate(result))) {
+      result.setUTCDate(result.getUTCDate() - 1);
+    }
+    return result;
+  }
+
+  function nthWednesday(year, month, nth) {
+    const first = new Date(Date.UTC(year, month, 1));
+    const offset = (3 - first.getUTCDay() + 7) % 7;
+    return new Date(Date.UTC(year, month, 1 + offset + (nth - 1) * 7));
+  }
+
+  function getPaymentDates(type, birthDay) {
+    const day = Number(birthDay);
+    if (type === "birthday" && (!Number.isInteger(day) || day < 1 || day > 31)) throw new RangeError("Day of birth must be from 1 to 31.");
+    const cycle = day <= 10 ? 2 : day <= 20 ? 3 : 4;
+    return Array.from({ length: 12 }, (_, month) => {
+      let date;
+      if (type === "birthday") date = nthWednesday(2027, month, cycle);
+      else if (type === "legacy") date = previousBusinessDay(new Date(Date.UTC(2027, month, 3)));
+      else if (type === "ssi") date = previousBusinessDay(new Date(Date.UTC(2027, month, 1)));
+      else throw new RangeError("Unknown payment type.");
+      return { month, date, iso: isoDate(date) };
+    });
+  }
+
+  function readableDate(date) {
+    const options = { timeZone: "UTC", month: "short", day: "numeric", weekday: "short" };
+    if (date.getUTCFullYear() !== 2027) options.year = "numeric";
+    return date.toLocaleDateString("en-US", options);
+  }
+
   function init() {
     const form = document.getElementById("cola-form");
     if (!form) return;
@@ -70,6 +114,46 @@
     form.addEventListener("input", update);
     form.addEventListener("change", update);
     update();
+
+    const scheduleForm = document.getElementById("schedule-form");
+    if (scheduleForm) {
+      const typeInputs = Array.from(scheduleForm.querySelectorAll('input[name="payment-type"]'));
+      const birthdayWrap = document.getElementById("birthday-wrap");
+      const birthdayInput = document.getElementById("birth-day");
+      const birthdayError = document.getElementById("birth-day-error");
+      const scheduleGrid = document.getElementById("schedule-grid");
+      const scheduleSummary = document.getElementById("schedule-summary");
+
+      function renderSchedule() {
+        const type = typeInputs.find(input => input.checked).value;
+        const needsBirthday = type === "birthday";
+        birthdayWrap.hidden = !needsBirthday;
+        birthdayInput.disabled = !needsBirthday;
+        birthdayError.textContent = "";
+        birthdayInput.setAttribute("aria-invalid", "false");
+        try {
+          const dates = getPaymentDates(type, birthdayInput.value);
+          const cycleText = type === "birthday"
+            ? `${Number(birthdayInput.value) <= 10 ? "Second" : Number(birthdayInput.value) <= 20 ? "Third" : "Fourth"} Wednesday schedule`
+            : type === "legacy" ? "Third-of-month schedule" : "SSI first-of-month schedule";
+          scheduleSummary.textContent = cycleText;
+          scheduleGrid.innerHTML = dates.map(({ month, date }) => `
+            <article class="date-card">
+              <span>${new Intl.DateTimeFormat("en-US", { month: "long", timeZone: "UTC" }).format(new Date(Date.UTC(2027, month, 1)))}</span>
+              <strong>${readableDate(date)}</strong>
+            </article>`).join("");
+        } catch (error) {
+          birthdayError.textContent = "Enter a day from 1 to 31.";
+          birthdayInput.setAttribute("aria-invalid", "true");
+          scheduleGrid.innerHTML = "";
+          scheduleSummary.textContent = "Enter your day of birth to see payment dates.";
+        }
+      }
+
+      scheduleForm.addEventListener("input", renderSchedule);
+      scheduleForm.addEventListener("change", renderSchedule);
+      renderSchedule();
+    }
   }
 
   if (typeof document !== "undefined") {
@@ -77,5 +161,5 @@
     else init();
   }
 
-  return { calculateBenefit, money };
+  return { calculateBenefit, getPaymentDates, money, nthWednesday, previousBusinessDay };
 });
